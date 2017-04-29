@@ -1,23 +1,46 @@
 import Hapi from "hapi";
-import inert from "inert";
-import vision from "vision";
-// import hapi-swagger from "hapi-swagger";
+import Inert from "inert";
+import Vision from "vision";
+import HapiSwagger from "hapi-swagger";
 
-import hapiConfig from "../config/hapiConfig"; 
-import dbConfig from "../config/dbConfig"; 
+import hapiConfig from "../config/hapiConfig";
+import dbConfig from "../config/dbConfig";
 
 const server = new Hapi.Server();
 server.connection(hapiConfig);
 
+const options = {
+    info: {
+        'title': 'API Documentation',
+        'version': "1.0.0",
+    }
+};
+
 server.route({
-    method: 'GET',
+    method: "GET",
     path: '/',
     handler: function (request, reply) {
         reply('Hello, world!');
     }
 });
 
-server.start((err) => {
-	if(err) throw err;
-	console.log(`Server running at: ${server.info.uri}`);
+server.register([
+    Inert,
+    Vision,
+    {
+        'register': HapiSwagger,
+        'options': options
+    }], () => {
+    server.start( (err) => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log('Server running at:', server.info.uri);
+        }
+    });
 });
+
+/*server.start((err) => {
+ if(err) throw err;
+ console.log(`Server running at: ${server.info.uri}`);
+ });*/
