@@ -4,7 +4,7 @@ import Vision from "vision";
 import HapiSwagger from "hapi-swagger";
 
 import hapiConfig from "../config/hapiConfig";
-import dbConfig from "../config/dbConfig";
+import dbDriver from "../driver/dbDriver";
 
 const server = new Hapi.Server();
 server.connection(hapiConfig);
